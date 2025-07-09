@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Comment j'ai appris à coder</title>
+  <style>
+    body { font-family: sans-serif; background: #fff; padding: 20px; }
+    header { border-bottom: 1px solid #ccc; margin-bottom: 20px; }
+    button {
+      padding: 10px;
+      margin-right: 10px;
+      background: #0077cc;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    .disabled { opacity: 0.5; pointer-events: none; }
+    .comment { background: #f0f0f0; padding: 10px; border-radius: 5px; margin-top: 10px; }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🗒️ Comment j'ai appris à coder</h1>
+    <a href="index.html">← Retour à l'accueil</a>
+  </header>
+
+  <article>
+    <p>J’ai commencé à apprendre le HTML, le CSS, puis le JavaScript avec des tutos en ligne. Mon outil préféré est Trebedit pour coder sur téléphone !</p>
+  </article>
+
+  <h3>❤️ Tu as aimé cet article ?</h3>
+  <button id="likeBtn" onclick="like()">👍 J’aime (<span id="like-count">0</span>)</button>
+  <button id="dislikeBtn" onclick="dislike()">👎 J’aime pas (<span id="dislike-count">0</span>)</button>
+
+  <h3>💬 Commentaires</h3>
+  <input type="text" id="name" placeholder="Ton nom">
+  <textarea id="message" placeholder="Ton commentaire..."></textarea>
+  <button onclick="addComment()">Envoyer</button>
+  <div id="comments"></div>
+
+  <script>
+    // Initialiser les likes/dislikes
+    let likes = localStorage.getItem("likes_article1") || 0;
+    let dislikes = localStorage.getItem("dislikes_article1") || 0;
+    let voted = localStorage.getItem("voted_article1") || "false";
+
+    document.getElementById("like-count").textContent = likes;
+    document.getElementById("dislike-count").textContent = dislikes;
+
+    if (voted === "true") {
+      document.getElementById("likeBtn").classList.add("disabled");
+      document.getElementById("dislikeBtn").classList.add("disabled");
+    }
+
+    function like() {
+      if (localStorage.getItem("voted_article1") === "true") return;
+      likes++;
+      localStorage.setItem("likes_article1", likes);
+      localStorage.setItem("voted_article1", "true");
+      document.getElementById("like-count").textContent = likes;
+      disableButtons();
+    }
+
+    function dislike() {
+      if (localStorage.getItem("voted_article1") === "true") return;
+      dislikes++;
+      localStorage.setItem("dislikes_article1", dislikes);
+      localStorage.setItem("voted_article1", "true");
+      document.getElementById("dislike-count").textContent = dislikes;
+      disableButtons();
+    }
+
+    function disableButtons() {
+      document.getElementById("likeBtn").classList.add("disabled");
+      document.getElementById("dislikeBtn").classList.add("disabled");
+    }
+
+    // Ajouter un commentaire (en local)
+    function addComment() {
+      const name = document.getElementById("name").value.trim();
+      const message = document.getElementById("message").value.trim();
+      if (name && message) {
+        const div = document.createElement("div");
+        div.className = "comment";
+        div.innerHTML = `<strong>${name}</strong><p>${message}</p>`;
+        document.getElementById("comments").appendChild(div);
+        document.getElementById("name").value = "";
+        document.getElementById("message").value = "";
+      }
+    }
+  </script>
+
+</body>
+</html>
